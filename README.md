@@ -29,7 +29,7 @@ OPENAI_API_KEY=<OPEN_AI_API_KEY>
 DD_API_KEY=<DATADOG_API_KEY>
 DD_SITE=<datadoghq.com|datadoghq.eu>
 ```
-For the `DD_SITE` variable, please keep the value relevant to you, you can find more information here 
+For the `DD_SITE` variable, please keep the value relevant to your Datadog account region. 
 
 ## Usage
 
