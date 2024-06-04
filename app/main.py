@@ -15,12 +15,10 @@ def simple_llm_call():
     completion = client.chat.completions.create(
       model="gpt-3.5-turbo",
       messages=[
-        {"role": "system", "content": "You are a helpful customer assistant for a furniture store."},
-        {"role": "user", "content": "What are the latest trends in home office furniture?"},
+        {"role": "system", "content": "You are a helpful customer assistant for a travel agency."},
+        {"role": "user", "content": "What are the top tourist attractions in Tokyo?"},
       ]
     )
-
-    logging.info('Simple completion created successfully')
 
   except Exception as e:
     logging.error('Error occurred: ' + str(e))
@@ -33,23 +31,24 @@ def evaluated_llm_call():
     completion = client.chat.completions.create(
       model="gpt-3.5-turbo",
       messages=[
-        {"role": "system", "content": "You are a helpful customer assistant for a furniture store."},
-        {"role": "user", "content": "I'd like to buy a chair for my living room."},
-        {"role": "assistant", "content": "Would you like recommendations for specific chairs, or do you have a particular style or brand in mind?"},
-        {"role": "user", "content": "I'm interested in a purple velvet chair with a dog logo."},
-        {"role": "assistant", "content": "That sounds like a unique choice! Let me check our inventory to see if we have any purple velvet chairs with a dog logo. I'll be right back with some options for you."},
-        {"role": "user", "content": "So, what are the options???"},
+        {"role": "user", "content": "What are the ethical implications of AI in healthcare?"},
       ]
     )
 
-    logging.info('Evaluated completion created successfully')
+    LLMObs.annotate(
+        span=None,
+        input_data=[{"role": "user", "content": "AI implications in healthcare?"}],
+        output_data=[{"role": "assistant", "content": "Privacy and security..."}],
+        metrics={"input_tokens": 4, "output_tokens": 6, "total_tokens": 10},
+        tags={"host": "test_host_name"},
+    )
 
     span_context = LLMObs.export_span(span=None)
     LLMObs.submit_evaluation(
         span_context,
         label="sentiment",
         metric_type="score",
-        value=10,
+        value=3,
     )
 
   except Exception as e:
@@ -91,7 +90,6 @@ def workflow_llm_call():
       model="gpt-3.5-turbo",
       messages = conversation
     )
-    logging.info('Workflow completion step2 created successfully')
 
   except Exception as e:
     logging.error('Error occurred: ' + str(e))
@@ -113,8 +111,6 @@ def workflow_llm_call():
       model="gpt-3.5-turbo",
       messages = conversation
     )
-
-    logging.info('Workflow completion step3 created successfully')
 
   except Exception as e:
     logging.error('Error occurred: ' + str(e))
