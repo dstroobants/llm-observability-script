@@ -56,7 +56,7 @@ def evaluated_llm_call():
 
   return completion
 
-@workflow(name="process_conversation")
+@workflow(name="process_conversation", session_id="abc12345")
 def workflow_llm_call():
   # Initial question and context
   conversation = [
@@ -69,16 +69,13 @@ def workflow_llm_call():
       messages = conversation
     )
 
+    # Append answer to conversation
+    conversation.append({ "role": "assistant", "content": completion.choices[0].message.content })
+
   except Exception as e:
     logging.error('Error occurred: ' + str(e))
 
   try:
-    # Append previous answer to conversation
-    conversation.append(
-      { "role": "assistant", 
-        "content": completion.choices[0].message.content
-      }
-    )
     # Append follow up question to conversation
     conversation.append(
       { "role": "user", 
@@ -91,16 +88,13 @@ def workflow_llm_call():
       messages = conversation
     )
 
+    # Append answer to conversation
+    conversation.append({ "role": "assistant", "content": completion.choices[0].message.content })
+
   except Exception as e:
     logging.error('Error occurred: ' + str(e))
 
   try:
-    # Append previous answer to conversation
-    conversation.append(
-      { "role": "assistant", 
-        "content": completion.choices[0].message.content
-      }
-    )
     # Append follow up question to conversation
     conversation.append(
       { "role": "user", 
