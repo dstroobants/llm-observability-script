@@ -24,5 +24,6 @@ services:
       - DD_AGENT_HOST=datadog-agent
       - DD_LLMOBS_ENABLED=1
       - DD_LLMOBS_APP_NAME="LLM_OBS_SCRIPT"
+      - DD_LLMOBS_AGENTLESS_ENABLED=1
     depends_on:
       - datadog-agent

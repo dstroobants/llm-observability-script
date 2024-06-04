@@ -27,7 +27,7 @@ def simple_llm_call():
 
   return completion
 
-#@llm(model_name="gpt-3.5-turbo", name="evaluated_llm", model_provider="open_ai")
+@llm(model_name="gpt-3.5-turbo", name="evaluated_llm", model_provider="open_ai")
 def evaluated_llm_call():
   try:
     completion = client.chat.completions.create(
@@ -44,13 +44,13 @@ def evaluated_llm_call():
 
     logging.info('Evaluated completion created successfully')
 
-    #span_context = LLMObs.export_span(span=None)
-    #LLMObs.submit_evaluation(
-    #    span_context,
-    #    label="sentiment",
-    #    metric_type="score",
-    #    value=10,
-    #)
+    span_context = LLMObs.export_span(span=None)
+    LLMObs.submit_evaluation(
+        span_context,
+        label="sentiment",
+        metric_type="score",
+        value=10,
+    )
 
   except Exception as e:
     logging.error('Error occurred: ' + str(e))
