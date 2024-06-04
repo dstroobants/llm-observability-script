@@ -59,27 +59,37 @@ def evaluated_llm_call():
 
 @workflow(name="process_conversation")
 def workflow_llm_call():
+  # Initial question and context
+  conversation = [
+    {"role": "system", "content": "You are a helpful customer assistant for a furniture store."},
+    {"role": "user", "content": "What are the latest trends in home office furniture?"},
+  ]
   try:
     completion = client.chat.completions.create(
       model="gpt-3.5-turbo",
-      messages = [
-        {"role": "system", "content": "You are a helpful customer assistant for a furniture store."},
-        {"role": "user", "content": "What are the latest trends in home office furniture?"},
-      ]
+      messages = conversation
     )
 
   except Exception as e:
     logging.error('Error occurred: ' + str(e))
 
   try:
+    # Append previous answer to conversation
+    conversation.append(
+      { "role": "assistant", 
+        "content": completion.choices[0].message.content
+      }
+    )
+    # Append follow up question to conversation
+    conversation.append(
+      { "role": "user", 
+        "content": "That's interesting. Can you recommend any specific brands or designs?"
+      }
+    )
+
     completion = client.chat.completions.create(
       model="gpt-3.5-turbo",
-      messages = [
-        {"role": "system", "content": "You are a helpful customer assistant for a furniture store."},
-        {"role": "user", "content": "What are the latest trends in home office furniture?"},
-        {"role": "assistant", "content": "The latest trends in home office furniture include ergonomic chairs, standing desks, and smart storage solutions."},
-        {"role": "user", "content": "That's interesting. Can you recommend any specific brands or designs?"},
-      ]
+      messages = conversation
     )
     logging.info('Workflow completion step2 created successfully')
 
@@ -87,16 +97,21 @@ def workflow_llm_call():
     logging.error('Error occurred: ' + str(e))
 
   try:
+    # Append previous answer to conversation
+    conversation.append(
+      { "role": "assistant", 
+        "content": completion.choices[0].message.content
+      }
+    )
+    # Append follow up question to conversation
+    conversation.append(
+      { "role": "user", 
+        "content": "Thank you for the information!"
+      }
+    )
     completion = client.chat.completions.create(
       model="gpt-3.5-turbo",
-      messages = [
-        {"role": "system", "content": "You are a helpful customer assistant for a furniture store."},
-        {"role": "user", "content": "What are the latest trends in home office furniture?"},
-        {"role": "assistant", "content": "The latest trends in home office furniture include ergonomic chairs, standing desks, and smart storage solutions."},
-        {"role": "user", "content": "That's interesting. Can you recommend any specific brands or designs?"},
-        {"role": "assistant", "content": "Certainly! Some popular brands for home office furniture are Herman Miller, Steelcase, and IKEA. As for designs, minimalist and Scandinavian styles are quite popular."},
-        {"role": "user", "content": "Thank you for the information!"},
-      ]
+      messages = conversation
     )
 
     logging.info('Workflow completion step3 created successfully')
