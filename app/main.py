@@ -107,15 +107,15 @@ def workflow_llm_call():
   return completion
 
 while True:
-  #simple_completion = simple_llm_call()
-  #print(simple_completion.choices[0].message)
-  #logging.info('Simple Completion created successfully')
-  #time.sleep(10)
+  simple_completion = simple_llm_call()
+  print(simple_completion.choices[0].message)
+  logging.info('Simple Completion created successfully')
+  time.sleep(10)
 
-  #evaluated_completion = evaluated_llm_call()
-  #print(evaluated_completion.choices[0].message)
-  #logging.info('Evaluated Completion created successfully')
-  #time.sleep(10)
+  evaluated_completion = evaluated_llm_call()
+  print(evaluated_completion.choices[0].message)
+  logging.info('Evaluated Completion created successfully')
+  time.sleep(10)
 
   workflow_completion = workflow_llm_call()
   print(workflow_completion.choices[0].message)
