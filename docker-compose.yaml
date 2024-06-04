@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  datadog-agent:
+    image: datadog/agent:latest
+    env_file:
+      - .env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    environment:
+      - DD_LOGS_ENABLED=true
+      - DD_LOG_LEVEL=ERROR
+      - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
+  llm-obs-script:
+    build: .
+    ports:
+      - 5000:5000
+    env_file:
+      - .env
+    environment:
+      - DD_SERVICE="llm-observability-script"
+      - DD_ENV="test"
+      - DD_AGENT_HOST=datadog-agent
+      - DD_LLMOBS_ENABLED=1
+      - DD_LLMOBS_APP_NAME="LLM_OBS_SCRIPT"
+    depends_on:
+      - datadog-agent
